@@ -1,55 +1,146 @@
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Szentendre Admin</title>
-	  <script src="https://get.mavo.io/mavo.min.js"></script>
-		<link rel="stylesheet" href="https://get.mavo.io/mavo.css">
-	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
-	</head>
 
-  <style>
-	  section {
-			display: none;
-		}
-		section.show {
-			display: block;
-		}
-	</style>
+<head>
+	<meta charset="utf-8">
+	<title>Szentendre Admin</title>
+	<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+	<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyDxOIifH2S1VXIfFZ4yEa9GHKx2ZK0hp6U",
+			authDomain: "szentendre-mavo.firebaseapp.com",
+			databaseURL: "https://szentendre-mavo.firebaseio.com",
+			projectId: "szentendre-mavo",
+			storageBucket: "szentendre-mavo.appspot.com",
+			messagingSenderId: "626136878088"
+		};
+		firebase.initializeApp(config);
+	</script>
+	<script src="/mavo.min.js"></script>
+	<script src="/mavo-firebase.min.js"></script>
 
-	<body>
-
-<main mv-app="szentendre-mavo" -mv-bar="none" -mv-storage="local" -mv-storage="szentendre-mavo.json" mv-storage="https://github.com/vhollo/szentendre">
-
-	<p>Mit szerkeszt?
-		<span property="admin.category" mv-edit="#categories" mv-mode="edit" mv-default="poi"></span> ([admin.category]).
-	</p>
-
-	<div hidden>
-		<select id="categories">
-			<option value="poi">Épület</option>
-			<option value="person">Személy</option>
-			<option value="photo">Fénykép</option>
-		</select>
-	</div>
-
-	([admin.category])
-	
-	<section property="poi" mv-multiple class="[if(category == 'poi', show)]">
-  <h1>Épületek</h1>
-</section>
-
-<section property="person" mv-multiple class="[if(category == 'person', show)]">
-  <h1>Személyek</h1>
-</section>
-
-<section property="photo" mv-multiple class="[if(category == 'photo', show)]">
-  <h1>Fényképek</h1>
-</section>
-
-</main>
-
+	<link rel="stylesheet" href="/mavo.css">
 <!--
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+</head>
+
+<style>
+	section {
+		display: none;
+	}
+
+	section.show {
+		display: block;
+	}
+
+	.property {
+		display: block;
+	}
+
+	[mv-mode='edit'] {
+		background-color: deeppink;
+		color:#fff;
+	}
+</style>
+
+<body>
+
+	<main mv-app="szentendre-mavo" -mv-bar="none" 
+		-mv-source="https://github.com/vhollo/szentendre"
+		mv-storage="firebase" 
+		mv-unauthenticated-permissions="read edit save"
+		mv-server-push="true"
+		mv-autosave="0"
+		-mv-storage="local" 
+		-mv-storage="szentendre-mavo.json" 
+		-mv-mode="edit"
+	>
+
+		<p>Mit szerkeszt?
+			<span property="category" mv-edit="#admin-categories" mv-mode="edit" mv-default="poi"></span> <span>[category].</span>
+		</p>
+
+		<div hidden>
+			<select id="admin-categories">
+				<option value="poi">Épület</option>
+				<option value="person">Személy</option>
+				<option value="photo">Fénykép</option>
+				<option value="preview">Előnézet</option>
+			</select>
+		</div>
+
+		[category]
+
+		<section class="[if(category == 'poi', show)]">
+			<h1>Épületek</h1>
+			<div mv-multiple property="poi" -mv-mode="edit" -mv-edit="#poi-names" mv-attribute="null">
+				<p>Neve:
+					<span class="property" mv-multiple property="name" -mv-mode="edit"></span> [name].
+				</p>
+				<p>Címe?
+					<span class="property" property="address" -mv-mode="edit"></span> [address].
+				</p>
+				<p>Funkciója?
+					<span class="property" mv-multiple property="function" -mv-mode="edit"></span> [function].
+				</p>
+				<p>Építtetők?
+					<span class="property" mv-multiple property="builder" -mv-mode="edit"></span> [builder].
+				</p>
+				<hr>
+				<hr>
+
+			</div>
+			<hr>
+		</section>
+
+		<section class="[if(category == 'person', show)]">
+			<h1>Személyek</h1>
+			<div property="person" mv-multiple -mv-mode="edit" -mv-edit="#poi-names" mv-attribute="null">
+				<p>
+					<span property="name" -mv-mode="edit">Új személy</span>
+				</p>
+			</div>
+		</section>
+
+		<section class="[if(category == 'photo', show)]">
+			<h1>Fényképek</h1>
+			<div property="photo" mv-multiple -mv-mode="edit" -mv-edit="#photos" mv-attribute="null">
+					<p>
+						<span property="title" -mv-mode="edit">Új fénykép</span>
+						<img property="src" -mv-mode="edit" src=""></img>[src]
+					</p>
+				</div>
+			</section>
+
+		<section class="[if(category == 'preview', show)]">
+			<h1>Előnézet</h1>
+			<div property="preview" mv-multiple -mv-edit="#preview-names" mv-attribute="null">[preview]
+					<p>POI: 
+						<span property="poi" -mv-mode="edit"></span>[poi]
+					</p>
+					<p>Nevei: 
+						<span property="poi.name" -mv-mode="edit"></span>[name]
+					</p>
+					<p>Cím: 
+						<span property="poi.address" -mv-mode="edit"></span>[address]
+					</p>
+					<p>Funkciók: 
+						<span property="poi.function" -mv-mode="edit"></span>[function]
+					</p>
+					<p>Építtetők:
+						<span property="poi.builder" -mv-mode="edit"></span>[builder]
+					</p>
+					<p>Fotók:
+						<span property="poi.photo" -mv-mode="edit"></span>[photo.src]
+					</p>
+				</div>
+			</section>
+
+	</main>
+
+	<!--
 <article -property="articles" -typeof="Article" -mv-multiple>
 
   <a -property="photos" mv-multiple mv-attribute="null">
