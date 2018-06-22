@@ -35,14 +35,25 @@
 		display: block;
 	}
 
-	.property {
+	[mv-mode='edit'] span[property] {
+		background-color: beige;
+	}
+
+	div[mv-multiple] {
+		border: solid 1px gray;
+		border-radius: 4px;
+		padding: 4px;
+		margin: 48px 0;
+	}
+
+	div[mv-multiple][mv-mode="edit"] {
+		padding: 4px 4px 4px 80px;
+	}
+
+	span[mv-multiple] {
 		display: block;
 	}
 
-	[mv-mode='edit'] {
-		background-color: deeppink;
-		color:#fff;
-	}
 </style>
 
 <body>
@@ -63,7 +74,7 @@
 		</p>
 
 		<div hidden>
-			<select id="admin-categories">
+			<select id="admin-categories" size="4">
 				<option value="poi">Épület</option>
 				<option value="person">Személy</option>
 				<option value="photo">Fénykép</option>
@@ -73,67 +84,79 @@
 
 		[category]
 
-		<section class="[if(category == 'poi', show)]">
+		<section class="[if(category == 'poi', 'show')]">
 			<h1>Épületek</h1>
-			<div mv-multiple property="poi" -mv-mode="edit" -mv-edit="#poi-names" mv-attribute="null">
-				<p>Neve:
-					<span class="property" mv-multiple property="name" -mv-mode="edit"></span> [name].
+			<div mv-multiple property="poi">
+				<p><b>Neve(i):</b>
+					<span mv-multiple property="name"></span>
 				</p>
-				<p>Címe?
-					<span class="property" property="address" -mv-mode="edit"></span> [address].
+				<p><b>Címe?</b><br>
+					<span property="address"></span><br>
+					<a class="button [if(address == '', 'hidden')]" href="http://maps.google.com/?q=[address]" target="_blank">Térkép</a>
 				</p>
-				<p>Funkciója?
-					<span class="property" mv-multiple property="function" -mv-mode="edit"></span> [function].
+				<p><b>Funkciói?</b>
+					<span mv-multiple property="function"></span>
 				</p>
-				<p>Építtetők?
-					<span class="property" mv-multiple property="builder" -mv-mode="edit"></span> [builder].
+				<p><b>Építés?</b><br>
+					<span property="built" mv-attribute="none">
+						Dátuma: <span property="date"></span><br>
+						Építtető(k): <span mv-multiple property="builder"></span><br>
+						Építész(ek): <span mv-multiple property="architect"></span>
+					</span>
 				</p>
-				<hr>
-				<hr>
+				<p><b>Nevezetes lakók?</b>
+					<span mv-multiple property="person"></span>
+				</p>
+				<p><b>Átalakítások, átépítések</b>
+					<span mv-multiple property="change" -mv-attribute="none">
+						<span property="date"></span>
+						<span property="text"></span>
+					</span>
+				</p>
 
 			</div>
 			<hr>
 		</section>
 
-		<section class="[if(category == 'person', show)]">
+		<section class="[if(category == 'person', 'show')]">
 			<h1>Személyek</h1>
-			<div property="person" mv-multiple -mv-mode="edit" -mv-edit="#poi-names" mv-attribute="null">
+			<div property="person" mv-multiple -mv-edit="#persons">
 				<p>
-					<span property="name" -mv-mode="edit">Új személy</span>
+					<span property="name">Új személy</span>
 				</p>
 			</div>
 		</section>
 
-		<section class="[if(category == 'photo', show)]">
+		<section class="[if(category == 'photo', 'show')]">
 			<h1>Fényképek</h1>
-			<div property="photo" mv-multiple -mv-mode="edit" -mv-edit="#photos" mv-attribute="null">
+			<div property="photo" mv-multiple -mv-edit="#photos">
 					<p>
-						<span property="title" -mv-mode="edit">Új fénykép</span>
-						<img property="src" -mv-mode="edit" src=""></img>[src]
+						<span property="title">Új fénykép</span>
+						<img property="src" src=""></img>[src]
 					</p>
 				</div>
 			</section>
 
-		<section class="[if(category == 'preview', show)]">
+		<section class="[if(category == 'preview', 'show')]">
 			<h1>Előnézet</h1>
-			<div property="preview" mv-multiple -mv-edit="#preview-names" mv-attribute="null">[preview]
+			<div property="preview" mv-multiple -mv-edit="#preview-names">[preview]
 					<p>POI: 
-						<span property="poi" -mv-mode="edit"></span>[poi]
+						<span property="poi"></span>[poi]
 					</p>
 					<p>Nevei: 
-						<span property="poi.name" -mv-mode="edit"></span>[name]
+						<span property="poi.name"></span>[name]
 					</p>
 					<p>Cím: 
-						<span property="poi.address" -mv-mode="edit"></span>[address]
+						<span property="poi.address"></span>[address]
 					</p>
 					<p>Funkciók: 
-						<span property="poi.function" -mv-mode="edit"></span>[function]
+						<span property="poi.function"></span>[function]
 					</p>
 					<p>Építtetők:
-						<span property="poi.builder" -mv-mode="edit"></span>[builder]
+						<span property="poi.builder"></span>[builder]
 					</p>
 					<p>Fotók:
-						<span property="poi.photo" -mv-mode="edit"></span>[photo.src]
+						<span property="poi.photo"></span>[photo.src]
 					</p>
 				</div>
 			</section>
@@ -143,7 +166,7 @@
 	<!--
 <article -property="articles" -typeof="Article" -mv-multiple>
 
-  <a -property="photos" mv-multiple mv-attribute="null">
+  <a -property="photos" mv-multiple>
   	<img -property="image" src="images/photo.jpg" alt="">
   	<span -property="name" mv-default="[readable(to(filename(image), '.'))]">Grumpy Cat</span>
   </a>

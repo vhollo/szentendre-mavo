@@ -9,12 +9,29 @@
 	],
 "creatorBuild": "26680",
 "files": {
+	"\/Házról házra, tématerv.doc": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/Házról házra, tématerv.doc",
+		"oF": 0
+		},
 	"\/index.html": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
 		"oAP": "\/index.html",
 		"oF": 0
+		},
+	"\/mavo-firebase.min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/mavo-firebase.min-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/mavo.css": {
 		"aP": 1,
@@ -35,6 +52,13 @@
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
+		},
+	"\/~$zról házra, tématerv.doc": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/~$zról házra, tématerv.doc",
+		"oF": 0
 		}
 	},
 "hooks": [
