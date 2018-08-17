@@ -1,0 +1,245 @@
+:root {
+  --footer-height: 40vh;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+}
+nav label {
+  margin-right:.5rem;
+}
+nav button {
+  margin-left:auto;
+}
+
+section {
+  display: none;
+  margin-top: 48px;
+  padding-bottom: var(--footer-height);
+}
+input:checked + section {
+  display: block;
+}
+
+.detail-header {
+  position: sticky;
+  top: .5rem;
+  padding: .5rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0;
+  background: lightblue; /*  rgba(26, 26, 26, 0.25); */
+  z-index: 11;
+}
+input:checked + .detail-header {
+  margin-bottom: 2.5rem;
+}
+.detail-header label {
+  align-self: center;
+  width: calc(50% - 3.2rem);
+  height: 3.2rem;
+  margin-bottom: 0;
+}
+/*
+ .detail-header .button {
+  margin-bottom: 0;
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0;
+}
+*/
+.detail-header label ~ label {
+  text-align: right;
+}
+.detail-header label span {
+  vertical-align: top;
+}
+
+.detail-header label [close] {
+  display: none;
+}
+.detail-header label [open] {
+  display: inline-block;
+}
+input:checked + .detail-header label [close] {
+  display: inline-block;
+}
+input:checked + .detail-header label [open] {
+  display: none;
+}
+
+input ~ .details, input ~ .details-text {
+  display: none;
+}
+input:checked ~ .details.building {
+  display: grid;
+}
+input:checked ~ .details.text {
+  display: block;
+}
+input:checked ~ .details.photo {
+  display: block;
+}
+
+.datetable {
+  display: grid;
+  grid-template-columns: 10rem 1rem 1fr;
+  grid-gap: 1rem;
+}
+
+.details {
+  margin-bottom:2.5rem;
+}
+
+.details.building {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr) ) ;
+  grid-gap: 1rem;
+}
+
+.details.text p {
+  margin-bottom:0;
+}
+
+select { height: auto; }
+
+[mv-app]:not([mv-mode=edit]) button.mv-add { display: none; }
+.hidden:not(.mv-unsaved-changes) { display: none; }
+
+figure {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) ;
+  grid-gap: 2.5rem 3rem;
+  margin:0 0 2rem;
+}
+figure > span {
+  position: relative;
+  height: 0;
+  padding-bottom: 100%;
+}
+figure > span > [property=loc] {
+  display: none;
+}
+figure > span > img {
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+figure > span > button {
+  position: absolute;
+  bottom: .5rem;
+  right: .5rem;
+  opacity: 0;
+}
+figure > span:hover > button {
+  opacity: 1;
+}
+
+figcaption {
+  grid-column: 1/-1;
+}
+
+
+.grid-span {
+  grid-column: auto / span 2;
+}
+
+/* PHOTOS FOOTER */
+
+footer {
+  position: sticky;
+  bottom: -.5rem;
+  max-height: var(--footer-height);
+  overflow-y: auto	;
+  display: inline-block;
+  margin-left: auto;
+  z-index: 12;
+}
+
+footer > div {
+  background-color: aliceblue;
+  border: solid 1px gray;
+  border-radius: .5rem;
+  padding: .5rem;
+}
+
+footer span[mv-multiple] button {
+  display: none;
+}
+
+
+/* milligram overwrites */
+
+.button, button, input[type='button'], input[type='reset'], input[type='submit'] {
+  padding: 0 1rem;
+  align-self: center;
+}
+.button.icon, button.icon {
+  margin-bottom: 0;
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0;
+}
+.button.full, button.full {
+  width: 100%;
+}
+
+td:first-of-type {
+  width: min-content;
+}
+td:last-of-type
+{
+  width: max-content;
+}
+
+/* mavo overwrites */
+
+section > div[mv-multiple] {
+  border: solid 1px gray;
+  border-radius: .5rem;
+  padding: .5rem;
+  margin: 48px 0;
+}
+/*
+ div[mv-multiple][mv-mode="edit"] {
+  padding-left: 80px;
+}
+*/
+span[mv-multiple] {
+  display: block;
+}
+
+div[property=text] {
+  display: inline-box;
+}
+
+span input.mv-editor {
+  width: 100%!important;
+}
+
+main .mv-bar.mv-ui {
+  width: 24px;
+  position: absolute;
+  right: .5rem;
+  font-size: larger;
+}
+
+.mv-item-bar {
+  margin: 0!important;
+}
+
+[mv-mode='edit'] span[property], figcaption[mv-mode='edit'], [mv-mode='edit'] .tinymce {
+  background-color: rgba(155, 77, 202, .25);
+  margin-bottom: 0.5rem;
+}
+
+.mv-message {
+  z-index: 1000;
+}

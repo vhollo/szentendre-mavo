@@ -1,9 +1,11 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="hu">
 
 <head>
 	<meta charset="utf-8">
 	<title>Szentendre Admin</title>
-	<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
 	<script>
 		// Initialize Firebase
 		var config = {
@@ -16,173 +18,175 @@
 		};
 		firebase.initializeApp(config);
 	</script>
-	<script src="mavo.min.js"></script>
-	<script src="mavo-firebase.min.js"></script>
-
-	<link rel="stylesheet" href="mavo.css">
+<link rel="stylesheet" href="/mavo.css">	
+<script src="/mavo.js"></script>
+<!--script- src="/mavo-tinymce.js"></script-->
+<!-- 	<link rel="stylesheet" href="https://dev.mavo.io/dist/mavo.css">	
+	<script src="https://dev.mavo.io/dist/mavo.min.js"></script> -->
+<!-- 	<link rel="stylesheet" href="https://get.mavo.io/mavo.css">
+	<script src="https://get.mavo.io/mavo.min.js"></script> -->
+	
+	<script src="/mavo-firebase.min.js"></script>
 <!--
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+<script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
+
+<link rel="stylesheet" href="/index-min.css">	
+
 </head>
-
-<style>
-	section {
-		display: none;
-	}
-
-	section.show {
-		display: block;
-	}
-
-	[mv-mode='edit'] span[property] {
-		background-color: beige;
-	}
-
-	div[mv-multiple] {
-		border: solid 1px gray;
-		border-radius: 4px;
-		padding: 4px;
-		margin: 48px 0;
-	}
-
-	div[mv-multiple][mv-mode="edit"] {
-		padding: 4px 4px 4px 80px;
-	}
-
-	span[mv-multiple] {
-		display: block;
-	}
-
-</style>
 
 <body>
 
-	<main mv-app="szentendre-mavo" -mv-bar="none" 
-		-mv-source="https://github.com/vhollo/szentendre"
-		mv-storage="firebase" 
-		mv-unauthenticated-permissions="read edit save"
-		mv-server-push="true"
-		mv-autosave="0"
-		-mv-storage="local" 
-		-mv-storage="szentendre-mavo.json" 
-		-mv-mode="edit"
+	<main 
+	mv-app="szentendre-mavo" 
+	mv-storage="firebase" 
+	mv-unauthenticated-permissions="read edit save"
+	mv-server-push="true"
+	mv-autosave="0"
+	mv-plugins="tinymce"
+	-mv-storage="local" 
+	-mv-source="https://github.com/vhollo/szentendre"
+	-mv-storage="szentendre-mavo.json" 
+	mv-mode="edit"
+	-mv-bar="none" 
 	>
-
-		<p>Mit szerkeszt?
-			<span property="category" mv-edit="#admin-categories" mv-mode="edit" mv-default="poi"></span> <span>[category].</span>
-		</p>
-
-		<div hidden>
-			<select id="admin-categories" size="4">
-				<option value="poi">Épület</option>
-				<option value="person">Személy</option>
-				<option value="photo">Fénykép</option>
-				<option value="preview">Előnézet</option>
-			</select>
-		</div>
-
-		[category]
-
-		<section class="[if(category == 'poi', 'show')]">
+<!-- 
+		<nav class="mv-bar -mv-ui">
+			<label class="button" for="poi">Épületek</label>
+			<label class="button" for="person">Személyek</label>
+			<label class="button" for="photo">Fotók</label>
+		</nav>
+ -->
+		<input type="radio" name="section" hidden checked id="poi" />
+		<section class="poi">
 			<h1>Épületek</h1>
 			<div mv-multiple property="poi">
-				<p><b>Neve(i):</b>
-					<span mv-multiple property="name"></span>
-				</p>
-				<p><b>Címe?</b><br>
-					<span property="address"></span><br>
-					<a class="button [if(address == '', 'hidden')]" href="http://maps.google.com/?q=[address]" target="_blank">Térkép</a>
-				</p>
-				<p><b>Funkciói?</b>
-					<span mv-multiple property="function"></span>
-				</p>
-				<p><b>Építés?</b><br>
-					<span property="built" mv-attribute="none">
-						Dátuma: <span property="date"></span><br>
-						Építtető(k): <span mv-multiple property="builder"></span><br>
-						Építész(ek): <span mv-multiple property="architect"></span>
-					</span>
-				</p>
-				<p><b>Nevezetes lakók?</b>
-					<span mv-multiple property="person"></span>
-				</p>
-				<p><b>Átalakítások, átépítések</b>
-					<span mv-multiple property="change" -mv-attribute="none">
+				<input hidden id="[idify(address)]" type="checkbox" />
+				<div class="detail-header">
+					<label for="[idify(address)]">
+						<span class="button icon"><box-icon open name='chevrons-down' color='white' size='lg'></box-icon><box-icon close name='chevrons-up' color='white' size='lg'></box-icon></span>
+						<span property="address">Címe?</span>
+					</label>
+					<a class="button icon [if(address = '', 'hidden')]" href="http://maps.google.com/?q=szentendre+[address]" target="_blank"><box-icon name='map-pin' color='white' size='lg'></box-icon></a>
+					<label for="[idify(address)]">
+						<span>[name]</span>
+					</label>
+				</div>
+				<div class="details building">
+					<p><b>Neve(i):</b>
+						<span mv-multiple property="name"></span>
+						<button type="button" class="icon mv-ui mv-add-name hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
+					</p>
+					<p><b>Funkció(i)?</b>
+						<span mv-multiple property="function"></span>
+						<button type="button" class="icon mv-ui mv-add-function hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
+					</p>
+					<p>
+							<b>Építés éve:</b> <span property="build_date"></span><br>
+							<b>Építtető(k):</b> <span mv-multiple property="builder"></span>
+							<button type="button" class="icon mv-ui mv-add-builder hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
+						</p>
+					<p>
+						<b>Építész(ek):</b> <span mv-multiple property="architect"></span>
+						<button type="button" class="icon mv-ui mv-add-architect hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
+					</p>
+					<p>
+						<b>Nevezetes személyek?</b>
+						<span mv-multiple property="person"></span>
+						<button type="button" class="icon mv-ui mv-add-person hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
+					</p>
+				</div>
+				<div class="details text">
+					<p><b>Átalakítások, átépítések</b></p>
+					<div class="datetable" mv-multiple property="change" sortable typeof="Changes">
 						<span property="date"></span>
-						<span property="text"></span>
-					</span>
-				</p>
-
+						<span>:</span>
+						<span property="text" class="tinymce"></span>
+					</div>
+					<button type="button" class="icon mv-ui mv-add-change hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
+				</div>
+				<div class="details text">
+					<p><b>Szöveges források</b></p>
+					<div property="longtext" class="tinymce"></div>
+				</div>
+				<div class="details photo">
+					<p><b>Fotók</b></p>
+					<!--figure property="figure" mv-multiple>
+						<span mv-multiple property="img" mv-accepts="photos.img">
+							<img property="src" width="100" height="100" />
+							<span property="loc" mv-default="[idify(address)]"></span>
+							<button mv-action="add(photos.img, img)"><box-icon name='clipboard' color='white' size='lg'></box-icon></button>
+						</span>
+						<figcaption property="figcaption"></figcaption>
+					</figure-->
+					<figure property="figure" mv-multiple>
+						<span mv-multiple property="img" mv-accepts="photos.img">
+							<img property="src" -width="100" -height="100" />
+							<span property="loc" mv-default="[idify(address)]"></span>
+							<button class="icon" mv-action="move(img, photos.img)"><box-icon name='trash' color='white' size='lg'></box-icon></button>
+							<div class="mv-item-bar -mv-ui" mv-rel="img"><button type="button" title="Drag to reorder img" class="mv-drag-handle"></button></div>
+						</span>
+						<button type="button" class="icon mv-ui mv-add-img hidden"><box-icon name='file-plus' color='white' size='lg'></box-icon></button>
+						<figcaption property="figcaption"></figcaption>
+					</figure>
+					<button type="button" class="icon mv-ui mv-add-figure hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
+				</div>
 			</div>
-			<hr>
+			<button type="button" class="icon full mv-ui mv-add-poi hidden"><box-icon name='folder-plus' color='white' size='lg'></box-icon></button>
 		</section>
 
-		<section class="[if(category == 'person', 'show')]">
+		<input type="radio" name="section" hidden id="person" />
+		<section class="person">
 			<h1>Személyek</h1>
 			<div property="person" mv-multiple -mv-edit="#persons">
 				<p>
 					<span property="name">Új személy</span>
 				</p>
+				<p>
+					<span property="ref" mv-multiple readonly>Kapcsolódó uri-k</span>
+				</p>
+				<p>
+					<span property="bio" class="t-inymce">Életrajz</span>
+				</p>
 			</div>
 		</section>
 
-		<section class="[if(category == 'photo', 'show')]">
+		<input type="radio" name="section" hidden id="photo" />
+		<section class="photo">
 			<h1>Fényképek</h1>
-			<div property="photo" mv-multiple -mv-edit="#photos">
-					<p>
-						<span property="title">Új fénykép</span>
-						<img property="src" src=""></img>[src]
-					</p>
-				</div>
-			</section>
+			<div -property="photo" -mv-multiple -id="#photos">
+				<figure>
+					<img -property="src" -mv-multiple src="images/photo.jpg" width="100" height="100" />
+					<figcaption -property="title">Fénykép címe</figcaption>
+				</figure>
+			</div>
+		</section>
 
-		<section class="[if(category == 'preview', 'show')]">
-			<h1>Előnézet</h1>
-			<div property="preview" mv-multiple -mv-edit="#preview-names">[preview]
-					<p>POI: 
-						<span property="poi"></span>[poi]
-					</p>
-					<p>Nevei: 
-						<span property="poi.name"></span>[name]
-					</p>
-					<p>Cím: 
-						<span property="poi.address"></span>[address]
-					</p>
-					<p>Funkciók: 
-						<span property="poi.function"></span>[function]
-					</p>
-					<p>Építtetők:
-						<span property="poi.builder"></span>[builder]
-					</p>
-					<p>Fotók:
-						<span property="poi.photo"></span>[photo.src]
-					</p>
-				</div>
-			</section>
+	<footer>
+		<div>
+			<input class="hidden" id="footer" type="checkbox" />
+			<div class="detail-header">
+				<label for="footer">
+					<span class="button icon"><box-icon name='trash' color='white' size='lg'></span>
+				</label>
+			</div>
+			<div class="details photo">
+				<figure property="photos">
+					<!--input type="text" property="where" readonly /-->
+					<span mv-multiple property="img" mv-accepts="img" mv-accepts="figure.img">
+						<img property="src" -width="100" -height="100" />
+						<span property="loc"></span>
+						<button class="icon" mv-action="move(img, photos.img)"><box-icon name='trash' color='white' size='lg'></box-icon></button>
+					</span>
+					<button type="button" class="icon mv-ui mv-add-img hidden"><box-icon name='file-plus' color='white' size='lg'></box-icon></button>
+				</figure>
+			</div>
+		</div>
+	</footer>
 
 	</main>
 
-	<!--
-<article -property="articles" -typeof="Article" -mv-multiple>
-
-  <a -property="photos" mv-multiple>
-  	<img -property="image" src="images/photo.jpg" alt="">
-  	<span -property="name" mv-default="[readable(to(filename(image), '.'))]">Grumpy Cat</span>
-  </a>
-
-  <p -property="description" class="tinymce">
-  	<strong>Tardar Sauce</strong> (born April 4, 2012), commonly known as <strong>Grumpy Cat</strong>, is a cat Internet and media personality and actress.
-  	She is known for her permanently "grumpy" facial appearance, which is caused by an <a href="https://en.wikipedia.org/wiki/Malocclusion" title="Malocclusion">underbite</a> and <a href="https://en.wikipedia.org/wiki/Dwarf_cat" title="Dwarf cat">feline dwarfism</a>.
-  </p>
-
-</article>
-
-<div class="links">
-	<a -property class="twitter" href="https://twitter.com/RealGrumpyCat" target="_blank" title="Twitter">🐦</a>
-	<a -property class="facebook" href="https://www.facebook.com/TheOfficialGrumpyCat" target="_blank" title="Facebook">f</a>
-	<a -property class="wikipedia" href="https://en.wikipedia.org/wiki/Grumpy_Cat" target="_blank" title="Wikipedia">W</a>
-</div>
--->
-
 </body>
+</html>

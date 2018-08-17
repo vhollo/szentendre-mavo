@@ -9,12 +9,78 @@
 	],
 "creatorBuild": "26680",
 "files": {
-	"\/Házról házra, tématerv.doc": {
+	"\/demo\/homepage.url": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/Házról házra, tématerv.doc",
+		"oAP": "\/demo\/homepage.url",
 		"oF": 0
+		},
+	"\/demo\/images\/photo.jpg": {
+		"ft": 16384,
+		"iS": 17071,
+		"jF": 0,
+		"oA": 0,
+		"oAP": "\/demo\/images\/photo.jpg",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"q": 100
+		},
+	"\/demo\/index.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/demo\/index.html",
+		"oF": 0
+		},
+	"\/demo\/style.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "\/demo\/style-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"\/images\/photo.jpg": {
+		"ft": 16384,
+		"iS": 17071,
+		"jF": 0,
+		"oA": 0,
+		"oAP": "\/images\/photo.jpg",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"q": 100
+		},
+	"\/index-copy.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/index-copy.html",
+		"oF": 0
+		},
+	"\/index-min.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "\/index-min-min.css",
+		"oF": 0,
+		"oS": 3
+		},
+	"\/index.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "\/index-min.css",
+		"oF": 0,
+		"oS": 3
 		},
 	"\/index.html": {
 		"cB": 0,
@@ -33,6 +99,16 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/mavo-tinymce.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/mavo-tinymce-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/mavo.css": {
 		"aP": 1,
 		"bl": 0,
@@ -42,6 +118,16 @@
 		"oAP": "\/mavo-min.css",
 		"oF": 0,
 		"oS": 3
+		},
+	"\/mavo.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/mavo-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/mavo.min.js": {
 		"ft": 64,
@@ -53,12 +139,15 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/~$zról házra, tématerv.doc": {
-		"cB": 0,
-		"ft": 8192,
+	"\/service-worker.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
 		"oA": 0,
-		"oAP": "\/~$zról házra, tématerv.doc",
-		"oF": 0
+		"oAP": "\/service-worker-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		}
 	},
 "hooks": [

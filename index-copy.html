@@ -1,0 +1,203 @@
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Szentendre Admin</title>
+	<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+	<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyDxOIifH2S1VXIfFZ4yEa9GHKx2ZK0hp6U",
+			authDomain: "szentendre-mavo.firebaseapp.com",
+			databaseURL: "https://szentendre-mavo.firebaseio.com",
+			projectId: "szentendre-mavo",
+			storageBucket: "szentendre-mavo.appspot.com",
+			messagingSenderId: "626136878088"
+		};
+		firebase.initializeApp(config);
+	</script>
+	<!-- <script src="mavo.min.js"></script> -->
+	<script src="https://get.mavo.io/mavo.min.js"></script>
+
+	<!-- <link rel="stylesheet" href="mavo.css"> -->
+	<link rel="stylesheet" href="https://get.mavo.io/mavo.css">	<script src="mavo-firebase.min.js"></script>
+<!--
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+</head>
+
+<style>
+	section {
+		display: none;
+	}
+
+	section.show {
+		display: block;
+	}
+
+	[mv-mode='edit'] span[property] {
+		background-color: beige;
+	}
+
+	div[mv-multiple] {
+		border: solid 1px gray;
+		border-radius: 4px;
+		padding: 4px;
+		margin: 48px 0;
+	}
+
+	div[mv-multiple][mv-mode="edit"] {
+		padding: 4px 4px 4px 80px;
+	}
+
+	span[mv-multiple] {
+		display: block;
+	}
+
+	select { height: auto; }
+
+	.hidden:not(.mv-unsaved-changes) { display: none; }
+
+</style>
+
+<body>
+
+	<main mv-app="szentendre-mavo" -mv-bar="none" 
+		-mv-source="https://github.com/vhollo/szentendre"
+		mv-storage="firebase" 
+		mv-unauthenticated-permissions="read edit save"
+		mv-server-push="true"
+		mv-autosave="0"
+		-mv-storage="local" 
+		-mv-storage="szentendre-mavo.json" 
+		-mv-mode="edit"
+	>
+
+		<p>Mit szerkeszt?
+			<span property="category" mv-edit="#admin-categories" mv-mode="edit" mv-default="poi"></span> <span>[category].</span>
+		</p>
+
+		<div hidden>
+			<select id="admin-categories" size="4">
+				<option value="poi">Épület</option>
+				<option value="person">Személy</option>
+				<option value="photo">Fénykép</option>
+				<option value="preview">Előnézet</option>
+			</select>
+		</div>
+
+		[category]
+
+		<section class="[if(category = 'poi', 'show')]">
+			<h1>Épületek</h1>
+			<p>Melyik épület?
+					<span property="selected" mv-edit="#selected-address" mv-mode="edit"></span> >> [selected]
+			</p>
+			<div hidden>
+				<select id="selected-address" readonly property="p" mv-value="poi" size="5">
+					<option value="">-</option>
+					<option mv-multiple mv-value="p.address"></option>
+				</select>
+			</div>
+
+			<div mv-multiple property="poi" class="[if(address = selected, 'show', 'hidden')]">
+				<div>
+					<p><b>Neve(i):</b>
+						<span mv-multiple property="name"></span>
+					</p>
+					<p><b>Címe?</b><br>
+						<span property="address"></span><br>
+						<a class="button [if(address = '', 'hidden')]" href="http://maps.google.com/?q=[address]" target="_blank">Térkép</a>
+					</p>
+					<p><b>Funkció(i)?</b>
+						<span mv-multiple property="function"></span>
+					</p>
+					<p>
+							<b>Építés éve:</b> <span property="build_date"></span><br>
+							<b>Építtető(k):</b> <span mv-multiple property="builder"></span><br>
+							<b>Építész(ek):</b> <span mv-multiple property="architect"></span>
+					</p>
+					<p><b>Nevezetes lakók?</b>
+						<span mv-multiple property="person"></span>
+					</p>
+					<p><b>Átalakítások, átépítések</b>
+						<span mv-multiple property="change" -mv-attribute="none">
+							<span property="date"></span>: 
+							<span property="text"></span>
+						</span>
+					</p>
+
+				</div>
+			</div>
+			<hr>
+		</section>
+
+		<section class="[if(category = 'person', 'show')]">
+			<h1>Személyek</h1>
+			<div property="person" mv-multiple -mv-edit="#persons">
+				<p>
+					<span property="name">Új személy</span>
+				</p>
+			</div>
+		</section>
+
+		<section class="[if(category = 'photo', 'show')]" mv-storage="local">
+			<h1>Fényképek</h1>
+			<div property="photo" mv-multiple -mv-edit="#photos">
+					<figure>
+						<img property="src" src="images/photo.jpg" width="100" height="100"></img> >>[src]
+						<figcaption property="title">Fénykép címe</figcaption>
+					</figure>
+				</div>
+			</section>
+
+		<section class="[if(category = 'preview', 'show')]">
+			<h1>Előnézet</h1>
+			<!--<div property="preview" mv-multiple -mv-edit="#preview-names">[preview]
+					<p>POI: 
+						<span property="poi"></span>[poi]
+					</p>
+					<p>Nevei: 
+						<span property="poi.name"></span>[name]
+					</p>
+					<p>Cím: 
+						<span property="poi.address"></span>[address]
+					</p>
+					<p>Funkciók: 
+						<span property="poi.function"></span>[function]
+					</p>
+					<p>Építtetők:
+						<span property="poi.builder"></span>[builder]
+					</p>
+					<p>Fotók:
+						<span property="poi.photo"></span>[photo.src]
+					</p>
+				</div>-->
+			</section>
+
+	</main>
+
+	<!--
+<article -property="articles" -typeof="Article" -mv-multiple>
+
+  <a -property="photos" mv-multiple>
+  	<img -property="image" src="images/photo.jpg" alt="">
+  	<span -property="name" mv-default="[readable(to(filename(image), '.'))]">Grumpy Cat</span>
+  </a>
+
+  <p -property="description" class="tinymce">
+  	<strong>Tardar Sauce</strong> (born April 4, 2012), commonly known as <strong>Grumpy Cat</strong>, is a cat Internet and media personality and actress.
+  	She is known for her permanently "grumpy" facial appearance, which is caused by an <a href="https://en.wikipedia.org/wiki/Malocclusion" title="Malocclusion">underbite</a> and <a href="https://en.wikipedia.org/wiki/Dwarf_cat" title="Dwarf cat">feline dwarfism</a>.
+  </p>
+
+</article>
+
+<div class="links">
+	<a -property class="twitter" href="https://twitter.com/RealGrumpyCat" target="_blank" title="Twitter">🐦</a>
+	<a -property class="facebook" href="https://www.facebook.com/TheOfficialGrumpyCat" target="_blank" title="Facebook">f</a>
+	<a -property class="wikipedia" href="https://en.wikipedia.org/wiki/Grumpy_Cat" target="_blank" title="Wikipedia">W</a>
+</div>
+-->
+
+</body>
