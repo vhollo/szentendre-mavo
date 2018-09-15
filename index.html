@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<title>Szentendre Admin</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js?ckcachebust=558713436"></script>
 	<script>
 		// Initialize Firebase
 		var config = {
@@ -18,22 +18,21 @@
 		};
 		firebase.initializeApp(config);
 	</script>
-<link rel="stylesheet" href="mavo.css">	
-<script src="mavo.js"></script>
-<!--script- src="/mavo-tinymce.js"></script-->
-<!-- 	<link rel="stylesheet" href="https://dev.mavo.io/dist/mavo.css">	
-	<script src="https://dev.mavo.io/dist/mavo.min.js"></script> -->
-<!-- 	<link rel="stylesheet" href="https://get.mavo.io/mavo.css">
-	<script src="https://get.mavo.io/mavo.min.js"></script> -->
+	<link rel="stylesheet" href="mavo.css?ckcachebust=8d71de02d99b314fc5bb0f980da027ec">
+	<script src="mavo.js?ckcachebust=84d8cb1340f271cb80cb63547d629dda"></script>
+	<script src="mavo-firebase@valterkraemer.js?ckcachebust=f72836cc0a53630d6843911dc86bbc0d"></script>
+<!-- 	<link rel="stylesheet" href="https://dev.mavo.io/dist/mavo.css?ckcachebust=558713436">	
+	<script src="https://dev.mavo.io/dist/mavo.min.js?ckcachebust=558713436"></script> -->
+<!--  	<link rel="stylesheet" href="https://get.mavo.io/mavo.css?ckcachebust=c20702a8bbf4650f443930f3ff6f3a2d">
+	<script src="https://get.mavo.io/mavo.min.js?ckcachebust=9ec94df85420eaf635e5f5c39bfe7f81"></script> -->
 	
-	<script src="mavo-firebase.min.js"></script>
 <!--
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css?ckcachebust=558713436">
 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
-<script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css?ckcachebust=558713436">
+<script src="https://unpkg.com/boxicons@latest/dist/boxicons.js?ckcachebust=558713436"></script>
 
-<link rel="stylesheet" href="index-min.css">	
+<link rel="stylesheet" href="index-min.css?ckcachebust=a4e4548433a1dcef11c576f78419b58f">	
 
 </head>
 
@@ -42,10 +41,10 @@
 	<main 
 	mv-app="szentendre-mavo" 
 	mv-storage="firebase" 
-	mv-unauthenticated-permissions="read edit save"
+	mv-unauthenticated-permissions="login status"
 	mv-server-push="true"
 	mv-autosave="0"
-	mv-plugins="tinymce"
+	-mv-plugins="tinymce"
 	-mv-storage="local" 
 	-mv-source="https://github.com/vhollo/szentendre"
 	-mv-storage="szentendre-mavo.json" 
@@ -58,84 +57,132 @@
 			<label class="button" for="person">Személyek</label>
 			<label class="button" for="photo">Fotók</label>
 		</nav>
- -->
+	-->
+	<div class="mv-bar mv-ui mv-compact -mv-tiny">
+			<button type="button" class="mv-edit">Edit</button>
+			<button type="button" class="mv-login">Login</button>
+			<!-- amíg van üres detail.id, addig nem kéne add-gomb -->
+			<button mv-action="add(detail), add(marker)" type="button" class="icon"><box-icon name='folder-plus' color='white' size='lg'></box-icon></button>
+		</div>
+			<!--mv-status--><!--mv-save--><!--mv-login--><!--mv-logout-->
+		<input hidden id="unselect" type="radio" name="openpoi" property="editindex" mv-value="-1" value="-1" />
 		<input type="radio" name="section" hidden checked id="poi" />
 		<section class="poi">
 			<h1>Épületek</h1>
-			<div mv-multiple property="poi">
-				<input hidden id="[idify(address)]" type="checkbox" />
-				<div class="detail-header">
-					<label for="[idify(address)]">
-						<span class="button icon"><box-icon open name='chevrons-down' color='white' size='lg'></box-icon><box-icon close name='chevrons-up' color='white' size='lg'></box-icon></span>
-						<span property="address">Címe?</span>
-					</label>
-					<a class="button icon [if(address = '', 'hidden')]" href="http://maps.google.com/?q=szentendre+[address]" target="_blank"><box-icon name='map-pin' color='white' size='lg'></box-icon></a>
-					<label for="[idify(address)]">
+
+			<div class="markers">
+			<div style="order: -[$index]" mv-multiple property="marker" data-id="[_id]" data-editindex="[editindex]" class="marker [if(editindex = -1 or editindex = $index, shown, hidden)]"><!-- class="[if(openpoi = '' or openpoi = _id or editindex = $index, shown, hidden)]" -->
+				<input hidden id="poi-[$index]" type="radio" name="openpoi" property="editindex" mv-value="-1" value="[$index]" />
+				<div class="header [if(!active, 'inactive')]">
+					<div class="icon">
+						<label open for="poi-[$index]"><!-- mv-action="set(detail[$index].address, address)" | mv-action="set(editindex, $index)" -->
+							<span class="button icon"><box-icon name='highlight' color='white' size='lg'></box-icon></span>
+						</label>
+						<label close for="unselect" mv-action="set(detail[editindex]._id, _id || 'noid'), set(active, if(!address, false, active))"><!-- -->
+							<span class="button icon"><box-icon name='check' color='white' size='lg'></box-icon></span>
+						</label>
+								</div>
+					<div>
+							<span><b>[address]</b></span><!-- mv-action="set(detail[editindex].address, address)" -->
+						<!-- <span class="hidden" property="geoloc"></span> -->
+					</div>
+					<!-- <div class="icon">
+						<button type="button" title="Delete this poi" class="icon mv-delete" mv-action="move(marker[$index],trash), move(detail[$index], trash)">
+							<box-icon name='trash' color='white' size='lg'></box-icon>
+						</button>
+					</div> -->
+					<!--label for="[idify(address)]">
 						<span>[name]</span>
-					</label>
+					</label-->
+					<a class="button icon" href="http://maps.google.com/?q=szentendre+[address]" target="_blank"><box-icon name="map" mv-value="icon" mv-attribute="name" color='white' size='lg' mv-default='map'></box-icon></a><!--  -[if(address = '', 'hidden')]" <img class="icon button" src="markers/[marker].svg" /> -->
 				</div>
+				<div class="details marker">
+					<p><b>Térkép-ikon</b>
+						<span property="icon" mv-edit="#icons"></span>
+						<br><span>([icon])</span>
+					</p>
+					<p><b>Címe</b>
+						<span property="address"></span><!-- mv-action="set(detail[editindex].address, address)" -->
+						<span class="hidden" property="geoloc"></span>
+						<input type="hidden" property="_id" mv-default="[idify(address)]" /><!--  mv-action="set(detail[$index]._id, _id)" -->
+					</p>
+					<label><input type="checkbox" property="active" name="active" />Aktív?</label>
+				</div>
+			</div>
+			</div>
+
+			<div mv-multiple property="detail" -mv-alias="marker" class="detail -[if(editindex = $index, shown, hidden)]" mv-if="editindex = $index" data-edix="editindex">
+			<input property="_id" mv-default="setme" type="hidden" />
 				<div class="details building">
-					<p><b>Neve(i):</b>
-						<span mv-multiple property="name"></span>
+					<div>
+						<p><b>Neve(i)</b></p>
+						<div mv-multiple property="name" sortable>
+							<span property="hu" id="poinamehu"></span>
+						</div>
 						<button type="button" class="icon mv-ui mv-add-name hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
-					</p>
-					<p><b>Funkció(i)?</b>
-						<span mv-multiple property="function"></span>
+					</div>
+					<div>
+						<p><b>Funkció(i)</b></p>
+						<div mv-multiple property="function" sortable>
+							<span property="hu"></span>
+						</div>
 						<button type="button" class="icon mv-ui mv-add-function hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
-					</p>
-					<p>
-							<b>Építés éve:</b> <span property="build_date"></span><br>
-							<b>Építtető(k):</b> <span mv-multiple property="builder"></span>
-							<button type="button" class="icon mv-ui mv-add-builder hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
-						</p>
-					<p>
-						<b>Építész(ek):</b> <span mv-multiple property="architect"></span>
+					</div>
+					<div>
+						<p><b>Építés éve:&#160;</b><span property="build_date"></span></p>
+						<p><b>Építtető(k):</b></p>
+						<span mv-multiple property="builder" sortable></span>
+						<button type="button" class="icon mv-ui mv-add-builder hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
+					</div>
+					<div>
+						<p><b>Építész(ek):</b></p>
+						<span mv-multiple property="architect" sortable></span>
 						<button type="button" class="icon mv-ui mv-add-architect hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
-					</p>
-					<p>
-						<b>Nevezetes személyek?</b>
-						<span mv-multiple property="person"></span>
+					</div>
+					<div>
+						<p><b>Nevezetes személy(ek)?</b></p>
+						<span mv-multiple property="person" sortable></span>
 						<button type="button" class="icon mv-ui mv-add-person hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
-					</p>
+					</div>
 				</div>
 				<div class="details text">
+					<div>
 					<p><b>Átalakítások, átépítések</b></p>
-					<div class="datetable" mv-multiple property="change" sortable typeof="Changes">
+					<div class="datetable">
+						<span><b>Dátum</b></span>
+						<div><b>Leírás</b></div>
+					</div>
+					<div class="datetable" mv-multiple property="change" sortable>
 						<span property="date"></span>
-						<span>:</span>
-						<span property="text" class="tinymce"></span>
+						<div property="text">
+							<div property="hu" class="tinymce"></div>
+						</div>
 					</div>
 					<button type="button" class="icon mv-ui mv-add-change hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
 				</div>
-				<div class="details text">
+				<div>
 					<p><b>Szöveges források</b></p>
-					<div property="longtext" class="tinymce"></div>
+					<div property="longtext">
+						<div property="hu" class="tinymce"></div>
+					</div>
 				</div>
-				<div class="details photo">
-					<p><b>Fotók</b></p>
-					<!--figure property="figure" mv-multiple>
-						<span mv-multiple property="img" mv-accepts="photos.img">
-							<img property="src" width="100" height="100" />
-							<span property="loc" mv-default="[idify(address)]"></span>
-							<button mv-action="add(photos.img, img)"><box-icon name='clipboard' color='white' size='lg'></box-icon></button>
-						</span>
-						<figcaption property="figcaption"></figcaption>
-					</figure-->
+				</div>
+				<div class="details photos">
+					<p><b>Fotók/sorozatok</b></p>
 					<figure property="figure" mv-multiple>
 						<span mv-multiple property="img" mv-accepts="photos.img">
-							<img property="src" -width="100" -height="100" />
-							<span property="loc" mv-default="[idify(address)]"></span>
-							<button class="icon" mv-action="move(img, photos.img)"><box-icon name='trash' color='white' size='lg'></box-icon></button>
-							<div class="mv-item-bar -mv-ui" mv-rel="img"><button type="button" title="Drag to reorder img" class="mv-drag-handle"></button></div>
+							<img property="src" width="100" height="100" />
+							<!-- <span -hidden property="loc" mv-default="[_id]"></span> -->
+							<button class="icon" mv-action="move(img, photos.img, 0)"><box-icon name='trash' color='white' size='lg'></box-icon></button>
 						</span>
 						<button type="button" class="icon mv-ui mv-add-img hidden"><box-icon name='file-plus' color='white' size='lg'></box-icon></button>
-						<figcaption property="figcaption"></figcaption>
+						<figcaption property="figcaption">Képaláírás</figcaption>
 					</figure>
 					<button type="button" class="icon mv-ui mv-add-figure hidden"><box-icon name='list-plus' color='white' size='lg'></box-icon></button>
 				</div>
 			</div>
-			<button type="button" class="icon full mv-ui mv-add-poi hidden"><box-icon name='folder-plus' color='white' size='lg'></box-icon></button>
-		</section>
+
+			</section>
 
 		<input type="radio" name="section" hidden id="person" />
 		<section class="person">
@@ -165,28 +212,101 @@
 		</section>
 
 	<footer>
-		<div>
-			<input class="hidden" id="footer" type="checkbox" />
-			<div class="detail-header">
-				<label for="footer">
-					<span class="button icon"><box-icon name='trash' color='white' size='lg'></span>
-				</label>
-			</div>
-			<div class="details photo">
-				<figure property="photos">
-					<!--input type="text" property="where" readonly /-->
-					<span mv-multiple property="img" mv-accepts="img" mv-accepts="figure.img">
-						<img property="src" -width="100" -height="100" />
-						<span property="loc"></span>
-						<button class="icon" mv-action="move(img, photos.img)"><box-icon name='trash' color='white' size='lg'></box-icon></button>
-					</span>
-					<button type="button" class="icon mv-ui mv-add-img hidden"><box-icon name='file-plus' color='white' size='lg'></box-icon></button>
-				</figure>
-			</div>
+		<input class="hidden" id="photos" type="checkbox" />
+		<div class="header">
+			<label for="photos">
+				<span class="button icon"><box-icon open name='trash' color='white' size='lg'></box-icon><box-icon close name='chevron-down' color='white' size='lg'></box-icon></span>
+			</label>
 		</div>
+			<figure property="photos">
+				<!--input type="text" property="where" readonly /-->
+				<button style="-order: 1" type="button" class="icon mv-ui mv-add-img hidden"><box-icon name='file-plus' color='white' size='lg'></box-icon></button>
+				<span mv-order="desc" style="-order: -[$index]" mv-multiple property="img" mv-accepts="img" [if(!src), hidden]>
+					<img property="src" width="100" height="100" />
+					<!-- <span property="loc"></span> -->
+					<button class="icon" mv-action="move(img, photos.img)"><box-icon name='trash' color='white' size='lg'></box-icon></button>
+				</span>
+			</figure>
 	</footer>
 
-	</main>
+						
+	<div hidden>
+<!-- 
+		<select id="icons">
+			<optgroup>
+				<option selected value="postal-code">default</option>
+				<option value="store">private</option>
+			</optgroup>
+			<optgroup>
+				<option value="museum">museum</option>
+				<option value="art-gallery">art-gallery</option>
+			</optgroup>
+			<optgroup>
+				<option value="church">church</option>
+				<option value="synagogue">synagogue</option>
+				<option value="mosque">mosque</option>
+			</optgroup>
+			<optgroup>
+				<option value="cafe">cafe</option>
+				<option value="restaurant">restaurant</option>
+				<option value="food">food</option>
+				<option value="grocery-or-supermarket">grocery-or-supermarket</option>
+				<option value="book-store">book-store</option>
+				<option value="health">health</option>
+			</optgroup>
+			<optgroup>
+				<option value="lodging">lodging</option>
+				<option value="bank">bank</option>
+				<option value="local-government">local-government</option>
+			</optgroup>
+			<optgroup>
+				<option value="transit-station">transit-station</option>
+				<option value="marina">marina</option>
+			</optgroup>
+		</select>
+ -->
 
+ <select id="icons">
+		<optgroup>
+			<option selected value="map">default</option>
+		</optgroup>
+		<optgroup>
+			<option value="bulb">A kultúra helyszínei</option>
+		</optgroup>
+		<optgroup>
+			<option value="body">Vallási helyszínek</option>
+<!-- 			<option value="church">church</option>
+			<option value="synagogue">synagogue</option>
+			<option value="mosque">mosque</option> -->
+		</optgroup>
+		<optgroup>
+			<option value="coffee">Kávézó</option>
+			<option value="restaurant">Étterem, bisztró, cukrászda</option>
+			<option value="drink">Szórakozóhely, bár</option>
+			<option value="store">Üzlet, szolgáltatás</option>
+			<option value="dumbbell">Testmozgás</option>
+		</optgroup>
+		<optgroup>
+			<option value="hotel">Szálláshely</option>
+		</optgroup>
+		<optgroup>
+			<option value="home">Magántulajdon</option>
+			<option value="crown">Vár, kastély, birtok</option>
+			<option value="directions">Hivatal, intézmény</option>
+			<option value="compass">Park, utca, köztér</option>
+		</optgroup>
+	</select>
+</div>
+
+</main>
+
+<!-- <script>
+(function() {
+  // your page initialization code here
+	// the DOM will be available here
+})();
+</script> -->
+<script src="mavo-tinymce.js?ckcachebust=164b4fdfd0b1b5f01e3b7a64bc7fcda0"></script>
 </body>
+
 </html>

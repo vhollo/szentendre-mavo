@@ -4416,7 +4416,8 @@ var _ = Mavo.Primitive = $.Class({
 
 				this.element.classList.remove("mv-pending-edit");
 
-				requestAnimationFrame(() => {
+				/// deleted by vhollo!
+				/* requestAnimationFrame(() => {
 					// Enter should insert a new item and backspace should delete it
 					if (!this.popup && this.closestCollection && this.editor && this.editor.matches(Mavo.selectors.textInput)) {
 						$.bind(this.editor, "keydown.mavo:edit", evt => {
@@ -4459,7 +4460,7 @@ var _ = Mavo.Primitive = $.Class({
 							}
 						});
 					}
-				});
+				}); */
 			});
 		}
 

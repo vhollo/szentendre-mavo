@@ -3,7 +3,8 @@
 var parser, serializer;
 
 Mavo.Plugins.register("tinymce", {
-	ready: $.include(self.tinymce, "https://cdn.tinymce.com/4/tinymce.min.js").then(() => {
+	/* ready: $.include(self.tinymce, "https://cdn.tinymce.com/4/tinymce.min.js").then(() => { */
+	ready: $.include(self.tinymce, "tinymce/tinymce.min.js").then(() => {
 		parser = new tinymce.html.DomParser();
 		serializer = new tinymce.html.Serializer();
 	})
@@ -25,8 +26,20 @@ Mavo.Elements.register(".tinymce", {
 				target: this.element,
 				inline: true,
 				menubar: false,
-				toolbar: "styleselect | bold italic | image link | table | bullist numlist",
-				plugins: "image code link table lists media tabfocus"
+				style_formats: [
+					{ title: 'Heading', block: 'h2' },
+					{ title: 'Subhead', block: 'h3' },
+					{ title: 'Sub-subhead', block: 'h4' },
+					{ title: 'Author', block: 'p', classes: 'author' }
+				],
+				powerpaste_word_import: 'clean',
+				powerpaste_html_import: 'clean',
+				toolbar: "styleselect | h2 bold italic underline blockquote | table | bullist numlist | superscript subscript | removeformat",
+				plugins: "link table lists tabfocus",
+				schema: 'html5',
+				element_format : 'html',
+				entity_encoding : "raw",
+				remove_trailing_brs: false
 			}).then(editors => {
 				this.element.tinymce = editors[0];
 
