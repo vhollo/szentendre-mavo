@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<title>Szentendre Admin</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js?ckcachebust=558720034"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js?ckcachebust=558867203"></script>
 	<script>
 		// Initialize Firebase
 		var config = {
@@ -18,21 +18,21 @@
 		};
 		firebase.initializeApp(config);
 	</script>
-	<link rel="stylesheet" href="mavo.css?ckcachebust=685d85a4694a72fd7ab42bd01c81b72f">
-	<script src="mavo.js?ckcachebust=f8c56ce7874195885d9dcaa10c2f7416"></script>
-	<script src="mavo-firebase@valterkraemer.js?ckcachebust=3e43e8b16ee713aee2a9e0fb3363c75b"></script>
-<!-- 	<link rel="stylesheet" href="https://dev.mavo.io/dist/mavo.css?ckcachebust=558720034">	
-	<script src="https://dev.mavo.io/dist/mavo.min.js?ckcachebust=558720034"></script> -->
-<!--  	<link rel="stylesheet" href="https://get.mavo.io/mavo.css?ckcachebust=ac261316443461b97c59f67f2c2dc345">
-	<script src="https://get.mavo.io/mavo.min.js?ckcachebust=57d913d509893d69f15e896754f943b0"></script> -->
+	<link rel="stylesheet" href="mavo.css?ckcachebust=942a5e28ac7306caa40ef304d0951a79">
+	<script src="mavo.js?ckcachebust=b54f22c9464a39efd61ac225622febe2"></script>
+	<script src="mavo-firebase@valterkraemer.js?ckcachebust=429992d1ae43386f14f2a2fc91f9acd5"></script>
+<!-- 	<link rel="stylesheet" href="https://dev.mavo.io/dist/mavo.css?ckcachebust=558867203">	
+	<script src="https://dev.mavo.io/dist/mavo.min.js?ckcachebust=558867203"></script> -->
+<!--  	<link rel="stylesheet" href="https://get.mavo.io/mavo.css?ckcachebust=997863c254a0ac3a381dfaa49b3a5207">
+	<script src="https://get.mavo.io/mavo.min.js?ckcachebust=51e9dc2ad2e2008447c260700a9b1ac5"></script> -->
 	
 <!--
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css?ckcachebust=558720034">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css?ckcachebust=558867203">
 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css?ckcachebust=558720034">
-<script src="https://unpkg.com/boxicons@latest/dist/boxicons.js?ckcachebust=558720034"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css?ckcachebust=558867203">
+<script src="https://unpkg.com/boxicons@latest/dist/boxicons.js?ckcachebust=558867203"></script>
 
-<link rel="stylesheet" href="index-min.css?ckcachebust=dffad79151f683b0395ad81cfbef4b70">	
+<link rel="stylesheet" href="index-min.css?ckcachebust=5dbf696935ea8a6c691fedbdd7fe7c1b">	
 
 </head>
 
@@ -81,8 +81,8 @@
 							<label close for="unselect" mv-action="set(detail[editindex]._id, _id || 'noid'), set(active, if(!address, false, active))"><!-- -->
 								<span class="button icon"><box-icon name='check' color='white' size='lg'></box-icon></span>
 							</label>
-									</div>
-						<div>
+						</div>
+						<div class="title">
 								<span><b>[address]</b></span><!-- mv-action="set(detail[editindex].address, address)" -->
 							<!-- <span class="hidden" property="geoloc"></span> -->
 						</div>
@@ -181,7 +181,7 @@
 				</div>
 			</div>
 
-			</section>
+		</section>
 
 		<input type="radio" name="section" hidden id="person" />
 		<section class="person">
@@ -199,24 +199,13 @@
 			</div>
 		</section>
 
-		<input type="radio" name="section" hidden id="photo" />
-		<section class="photo">
-			<h1>Fényképek</h1>
-			<div -property="photo" -mv-multiple -id="#photos">
-				<figure>
-					<img -property="src" -mv-multiple src="images/photo.jpg" width="100" height="100" />
-					<figcaption -property="title">Fénykép címe</figcaption>
-				</figure>
+		<footer>
+			<input class="hidden" id="photos" type="checkbox" />
+			<div class="header">
+				<label for="photos">
+					<span class="button icon"><box-icon open name='trash' color='white' size='lg'></box-icon><box-icon close name='chevron-down' color='white' size='lg'></box-icon></span>
+				</label>
 			</div>
-		</section>
-
-	<footer>
-		<input class="hidden" id="photos" type="checkbox" />
-		<div class="header">
-			<label for="photos">
-				<span class="button icon"><box-icon open name='trash' color='white' size='lg'></box-icon><box-icon close name='chevron-down' color='white' size='lg'></box-icon></span>
-			</label>
-		</div>
 			<figure property="photos">
 				<!--input type="text" property="where" readonly /-->
 				<button style="-order: 1" type="button" class="icon mv-ui mv-add-img hidden"><box-icon name='file-plus' color='white' size='lg'></box-icon></button>
@@ -226,7 +215,7 @@
 					<button class="icon" mv-action="move(img, photos.img)"><box-icon name='trash' color='white' size='lg'></box-icon></button>
 				</span>
 			</figure>
-	</footer>
+		</footer>
 
 						
 	<div hidden>
@@ -305,7 +294,7 @@
 	// the DOM will be available here
 })();
 </script> -->
-<script src="mavo-tinymce.js?ckcachebust=cf2f334da111fecf236b565b09730639"></script>
+<script src="mavo-tinymce.js?ckcachebust=4335844ceee6fc2fadc7f72a222c4195"></script>
 </body>
 
 </html>
